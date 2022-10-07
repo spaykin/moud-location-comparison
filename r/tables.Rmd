@@ -1,0 +1,45 @@
+---
+title: "MOUD Location Data Comparison for 16 Southern IL Counties"
+author: "Susan Paykin"
+date: '2022-10-07'
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+
+```
+
+```{r libraries, include=FALSE}
+library(tidyverse)
+library(stargazer)
+library(readxl)
+library(stringr)
+library(knitr)
+
+source("~/Desktop/ETHIC Access/ethic-moud-access/r/data-wrangling.R", local = knitr::knit_global())
+```
+
+```{r first, include=FALSE}
+# Merge count of ETHIC & MAARC providers grouped by county and MOUD types
+meth <- full_join(ethic_meth, maarc_meth, by = "county")
+bup <- full_join(ethic_bup, maarc_bup, by = "county")
+nal <- full_join(ethic_nal, maarc_nal, by = "county")
+
+```
+
+### Results tables
+
+```{r, echo=FALSE}
+stargazer(meth, summary=FALSE, type='text', 
+          title = "Methadone Locations by County",
+          out = "figures/meth_table.txt")
+
+stargazer(bup, summary=FALSE, type='text', 
+          title = "Buprenorphine Locations by County")
+
+stargazer(nal, summary=FALSE, type='text',
+          title = "Naltrexone Locations by County")
+```
